@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: CloudDevOps/terraform 
+        working-directory: CloudDevOps
 
 
     # If your .tf files are inside a subfolder, set it here:
