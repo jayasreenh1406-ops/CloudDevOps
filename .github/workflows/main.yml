@@ -12,11 +12,7 @@ permissions:
 jobs:
   terraform:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: CloudDevOps
-
-
+    
     # If your .tf files are inside a subfolder, set it here:
     # defaults:
     #   run:
