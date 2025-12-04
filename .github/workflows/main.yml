@@ -1,49 +1,45 @@
+
 name: Terraform
+
 on:
   workflow_dispatch:
-  push:
-    branches: [ master ]
+  # push:
+  #   branches: [ master ]   # Your screenshot shows branch 'master'. Change if needed.
 
 jobs:
   terraform:
     runs-on: ubuntu-latest
 
     env:
-      AWS_ACCESS_KEY_ID:     ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      AWS_DEFAULT_REGION:    us-east-1
-      # Uncomment if you stored a session token:
-      # AWS_SESSION_TOKEN:     ${{ secrets.AWS_SESSION_TOKEN }}
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: us-east-1
+
+    defaults:
+      run:
+        working-directory: Day-2-Terraform-configuration-files
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Verify repo layout (sanity check)
-        run: |
-          echo "Workspace: $GITHUB_WORKSPACE"
-          ls -la CloudDevOps/Day-2-Terraform-configuration-files
-
+      
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_wrapper: false
 
-      # Optional: verify creds before TF init (helps isolate the problem)
-      - name: Verify AWS creds (STS)
-        run: |
-          sudo apt-get update -y
-          sudo apt-get install -y awscli
-          aws sts get-caller-identity
+      - name: Terraform Version
+        run: terraform version
 
       - name: Terraform Init
-        run: terraform -chdir=CloudDevOps/Day-2-Terraform-configuration-files init -input=false
+        run: terraform init -input=false
 
       - name: Terraform Validate
-        run: terraform -chdir=CloudDevOps/Day-2-Terraform-configuration-files validate
+        run: terraform validate
 
       - name: Terraform Plan
-        run: terraform -chdir=CloudDevOps/Day-2-Terraform-configuration-files plan -out=tfplan
+        run: terraform plan -out=tfplan
 
       - name: Terraform Apply (manual runs only)
         if: github.event_name == 'workflow_dispatch'
+        run: terraform apply -auto-approve tfplan
