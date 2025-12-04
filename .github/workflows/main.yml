@@ -6,31 +6,23 @@ on:
   # push:
   #   branches: [ master ]   # Your screenshot shows branch 'master'. Change if needed.
 
-permissions:
-  contents: read
-
 jobs:
   terraform:
     runs-on: ubuntu-latest
+
+    env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: us-east-1
 
     defaults:
       run:
         working-directory: Day-2-Terraform-configuration-files
 
-    env:
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      AWS_DEFAULT_REGION: us-east-1
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: List files (sanity check)
-        run: |
-          pwd
-          ls -la
-
+      
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
