@@ -2,17 +2,17 @@
 name: Terraform
 
 on:
-  workflow_dispatch:
-  # push:
-  #   branches: [ master ]   # Your screenshot shows branch 'master'. Change if needed.
+ # workflow_dispatch:
+  push:
+    branches: [ master ]   # Your screenshot shows branch 'master'. Change if needed.
 
 jobs:
   terraform:
     runs-on: ubuntu-latest
 
-    # defaults:
-    #   run:
-    #     working-directory: Day-2-Terraform-configuration-files
+    defaults:
+      run:
+        working-directory: Day-2-Terraform-configuration-files
 
     steps:
       - name: Checkout
